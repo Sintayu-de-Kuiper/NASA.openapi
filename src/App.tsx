@@ -1,6 +1,7 @@
 import * as React from "react";
 import {Routes, Route, Link} from "react-router-dom";
-import Apod from "./pages/Apod.tsx";
+import Apod from "./components/ApodFeed.tsx";
+import ApodDetail from "./components/ApodDetail.tsx";
 
 const App: React.FC = () => {
   return (
@@ -19,6 +20,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/apod" element={<Apod/>}/>
+          <Route path="/apod/:date" element={<ApodDetail/>}/>
         </Routes>
       </main>
     </div>
