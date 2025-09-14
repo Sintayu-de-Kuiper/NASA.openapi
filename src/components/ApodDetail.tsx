@@ -39,7 +39,7 @@ const ApodDetail: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full bg-black pt-20">
+    <div className="w-full min-h-screen h-full bg-black pt-20">
       <div className="px-6 max-w-7xl mx-auto py-8">
         <button
           onClick={() => navigate('/apod')}

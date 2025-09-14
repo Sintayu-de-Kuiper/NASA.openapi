@@ -83,7 +83,7 @@ const ApodFeed: React.FC = () => {
   ];
 
   return (
-    <div className="w-full h-full bg-black pt-20">
+    <div className="w-full min-h-screen h-full bg-black pt-20">
       <div className="mx-auto px-6 py-8 max-w-7xl">
         <h1 className="text-3xl font-bold text-white mb-10">Astronomy Picture of the Day</h1>
         <InfiniteScroll
