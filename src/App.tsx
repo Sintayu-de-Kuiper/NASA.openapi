@@ -2,6 +2,9 @@ import * as React from "react";
 import {Routes, Route, Link} from "react-router-dom";
 import Apod from "./components/ApodFeed.tsx";
 import ApodDetail from "./components/ApodDetail.tsx";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import NASALogo from './assets/NASA_Worm_logo.svg?react';
 
 const App: React.FC = () => {
   return (
@@ -9,7 +12,9 @@ const App: React.FC = () => {
       <nav className="bg-blue-600 p-4">
         <ul className="flex space-x-6 text-white font-medium">
           <li>
-            <Link to="/" className="hover:underline">Home</Link>
+            <Link to="/" className="hover:underline">
+              <NASALogo classname="bg-white"/>
+            </Link>
           </li>
           <li>
             <Link to="/apod" className="hover:underline">APOD</Link>
