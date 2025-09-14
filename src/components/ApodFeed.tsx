@@ -78,23 +78,28 @@ const ApodFeed: React.FC = () => {
     fetchInitial().then(r => r);
   }, []);
 
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+
   return (
-    <div className="relative h-full w-full">
-      <div className="mx-auto my-10 p-6 max-w-7xl">
+    <div className="w-full h-full bg-black pt-20">
+      <div className="mx-auto px-6 py-8 max-w-7xl">
+        <h1 className="text-3xl font-bold text-white mb-10">Astronomy Picture of the Day</h1>
         <InfiniteScroll
           dataLength={apods.length}
           next={fetchNext}
           hasMore={hasMore}
-          loader={<h4 className="text-white text-center">Loading more APODs...</h4>}
-          endMessage={<p className="text-white text-center">No more APODs to load.</p>}
+          loader={<h4 className="text-white text-center">Loading...</h4>}
+          endMessage={<p className="text-white text-center">The end :)</p>}
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8">
             {apods.map((apod) => (
               <Link
                 key={apod.date}
                 to={`/apod/${apod.date}`}
                 state={{apod}} // Pass the full APOD object
-                className="bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                className="border border-white/25 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
               >
                 <img
                   src={apod.media_type === 'video' ? apod.thumbnail_url : apod.url}
@@ -104,7 +109,11 @@ const ApodFeed: React.FC = () => {
                 />
                 <div className="p-4">
                   <h3 className="text-white font-semibold text-lg">{apod.title}</h3>
-                  <p className="text-gray-400 text-sm">{new Date(apod.date).toLocaleDateString()}</p>
+                  <p
+                    className="text-gray-400 text-sm">{monthNames[new Date(apod.date).getMonth()]} {new Date(apod.date).getDate()}
+                    {new Date(apod.date).getFullYear() !== new Date().getFullYear() && (
+                      <> {new Date(apod.date).getFullYear()}</>
+                    )}</p>
                 </div>
               </Link>
             ))}
