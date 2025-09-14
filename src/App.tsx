@@ -20,7 +20,7 @@ const App: React.FC = () => {
 };
 
 const Home: React.FC = () => (
-  <div className="text-center">
+  <div className="text-center mt-20">
     <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome to NASA App!</h1>
     <p className="text-gray-600">Navigate to APOD to see today's astronomy picture.</p>
   </div>
