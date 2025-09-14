@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.custom-mask {
+  mask: linear-gradient(black, black, transparent);
+}

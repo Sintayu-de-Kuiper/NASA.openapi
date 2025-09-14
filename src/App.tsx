@@ -1,26 +1,13 @@
 import * as React from "react";
-import {Routes, Route, Link} from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 import Apod from "./components/ApodFeed.tsx";
 import ApodDetail from "./components/ApodDetail.tsx";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-import NASALogo from './assets/NASA_Worm_logo.svg?react';
+import Header from "./components/Header.tsx";
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen">
-      <nav className="bg-blue-600 p-4">
-        <ul className="flex space-x-6 text-white font-medium">
-          <li>
-            <Link to="/" className="hover:underline">
-              <NASALogo classname="bg-white"/>
-            </Link>
-          </li>
-          <li>
-            <Link to="/apod" className="hover:underline">APOD</Link>
-          </li>
-        </ul>
-      </nav>
+    <div className="min-h-screen bg-black">
+      <Header/>
       <main className="container mx-auto p-4">
         <Routes>
           <Route path="/" element={<Home/>}/>

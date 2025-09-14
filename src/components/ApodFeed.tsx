@@ -80,7 +80,7 @@ const ApodFeed: React.FC = () => {
 
   return (
     <div className="relative h-full w-full">
-      <div className="mx-auto p-4 max-w-7xl">
+      <div className="mx-auto my-10 p-6 max-w-7xl">
         <InfiniteScroll
           dataLength={apods.length}
           next={fetchNext}
