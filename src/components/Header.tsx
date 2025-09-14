@@ -12,18 +12,16 @@ const Header: React.FC = () => {
       ></div>
       <header className="fixed left-0 right-0 top-0 z-50">
         <div className="w-full max-w-7xl px-6 mx-auto">
-          <nav className="flex items-center justify-between py-4 lg:h-20">
-            <ul className="flex gap-10 text-white/50 font-medium">
-              <li>
-                <NavLink to="/">
-                  <NASALogo/>
-                </NavLink>
-              </li>
+          <nav className="flex items-center justify-between gap-4 py-4 lg:h-20">
+            <NavLink to="/">
+              <NASALogo/>
+            </NavLink>
+            <ul className="flex gap-4 text-white/50 font-medium w-full ml-3">
               <li>
                 <NavLink
                   to="/apod"
                   className={({isActive}) =>
-                    isActive ? "text-white hover:underline font-medium" : "hover:underline font-medium"
+                    isActive ? "text-white font-medium px-4 py-1.5" : "hover:text-white font-medium px-4 py-1.5"
                   }
                 >
                   APOD
