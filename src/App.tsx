@@ -6,9 +6,9 @@ import Header from "./components/Header.tsx";
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <div>
       <Header/>
-      <main className="container mx-auto p-4">
+      <main>
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/apod" element={<Apod/>}/>
