@@ -3,17 +3,20 @@ import {Routes, Route} from "react-router-dom";
 import Apod from "./components/ApodFeed.tsx";
 import ApodDetail from "./components/ApodDetail.tsx";
 import Header from "./components/Header.tsx";
+import {ApodFeedProvider} from './context/ApodFeedContext.tsx';
 
 const App: React.FC = () => {
   return (
     <div>
       <Header/>
       <main>
-        <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/apod" element={<Apod/>}/>
-          <Route path="/apod/:date" element={<ApodDetail/>}/>
-        </Routes>
+        <ApodFeedProvider>
+          <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/apod" element={<Apod/>}/>
+            <Route path="/apod/:date" element={<ApodDetail/>}/>
+          </Routes>
+        </ApodFeedProvider>
       </main>
     </div>
   )

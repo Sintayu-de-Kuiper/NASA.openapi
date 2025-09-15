@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+// Updated ApodFeed.tsx (Apod.ts remains unchanged)
+import React, { useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
-import type {Apod} from "../types/Apod.ts";
+import ApodFeedContext from "../context/ApodFeedContext.tsx";
 
 const API_KEY = import.meta.env.VITE_NASA_API_KEY;
 if (!API_KEY) {
@@ -13,11 +14,13 @@ if (!API_URL) {
   throw new Error('API_URL is not defined');
 }
 
-
 const ApodFeed: React.FC = () => {
-  const [apods, setApods] = useState<Apod[]>([]);
-  const [lastDate, setLastDate] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const context = useContext(ApodFeedContext);
+  if (!context) {
+    throw new Error('ApodFeed must be used within an ApodFeedProvider');
+  }
+  const { apods, setApods, lastDate, setLastDate, hasMore, setHasMore } = context;
+
   const ITEMS_PER_BATCH = 9;
 
   const getDateString = (date: Date): string => date.toISOString().slice(0, 10);
@@ -74,9 +77,10 @@ const ApodFeed: React.FC = () => {
     if (data.length < ITEMS_PER_BATCH) setHasMore(false);
   };
 
-
   useEffect(() => {
-    fetchInitial().then(r => r);
+    if (apods.length === 0) {
+      fetchInitial();
+    }
   }, []);
 
   const monthNames = ["January", "February", "March", "April", "May", "June",
