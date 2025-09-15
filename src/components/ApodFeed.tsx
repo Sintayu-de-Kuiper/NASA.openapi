@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+// Updated ApodFeed.tsx (Apod.ts remains unchanged)
+import React, { useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
-import type {Apod} from "../types/Apod.ts";
+import ApodFeedContext from "../context/ApodFeedContext.tsx";
 
 const API_KEY = import.meta.env.VITE_NASA_API_KEY;
 if (!API_KEY) {
@@ -13,11 +14,14 @@ if (!API_URL) {
   throw new Error('API_URL is not defined');
 }
 
-
 const ApodFeed: React.FC = () => {
-  const [apods, setApods] = useState<Apod[]>([]);
-  const [lastDate, setLastDate] = useState<string | null>(null);
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const context = useContext(ApodFeedContext);
+  if (!context) {
+    throw new Error('ApodFeed must be used within an ApodFeedProvider');
+  }
+  const { apods, setApods, lastDate, setLastDate, hasMore, setHasMore } = context;
+
+  const ITEMS_PER_BATCH = 9;
 
   const getDateString = (date: Date): string => date.toISOString().slice(0, 10);
 
@@ -38,18 +42,18 @@ const ApodFeed: React.FC = () => {
   const fetchInitial = async () => {
     const today = new Date();
     const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 9); // Last 10 days
+    startDate.setDate(today.getDate() - (ITEMS_PER_BATCH)); // 9 days for 9 items
     const startStr = getDateString(startDate);
     const endStr = getDateString(today);
 
-    // Correctly calculate newLast as the day before startDate
+    // Set newLast to the day before startDate
     const newLast = new Date(startDate);
     newLast.setDate(startDate.getDate() - 1);
 
     setLastDate(getDateString(newLast));
     const initialAPODs = await fetchBatch(startStr, endStr);
     setApods(initialAPODs);
-    if (initialAPODs.length < 10) setHasMore(false);
+    if (initialAPODs.length < ITEMS_PER_BATCH) setHasMore(false);
   };
 
   const fetchNext = async () => {
@@ -57,7 +61,7 @@ const ApodFeed: React.FC = () => {
 
     const endDate = new Date(lastDate);
     const startDate = new Date(endDate);
-    startDate.setDate(endDate.getDate() - 9);
+    startDate.setDate(endDate.getDate() - (ITEMS_PER_BATCH - 1));
 
     const start = getDateString(startDate);
     const end = getDateString(endDate);
@@ -65,17 +69,18 @@ const ApodFeed: React.FC = () => {
     const data = await fetchBatch(start, end);
     setApods((prev) => [...prev, ...data]);
 
-    // Correctly calculate newLast as the day before startDate
+    // Set newLast to the day before startDate
     const newLast = new Date(startDate);
     newLast.setDate(startDate.getDate() - 1);
 
     setLastDate(getDateString(newLast));
-    if (data.length < 10) setHasMore(false);
+    if (data.length < ITEMS_PER_BATCH) setHasMore(false);
   };
 
-
   useEffect(() => {
-    fetchInitial().then(r => r);
+    if (apods.length === 0) {
+      fetchInitial();
+    }
   }, []);
 
   const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -91,9 +96,8 @@ const ApodFeed: React.FC = () => {
           next={fetchNext}
           hasMore={hasMore}
           loader={<h4 className="text-white text-center">Loading...</h4>}
-          endMessage={<p className="text-white text-center">The end :)</p>}
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
             {apods.map((apod) => (
               <Link
                 key={apod.date}
