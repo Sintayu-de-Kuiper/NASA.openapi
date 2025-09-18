@@ -102,7 +102,7 @@ const ApodFeed: React.FC = () => {
                 key={apod.date}
                 to={`/apod/${apod.date}`}
                 state={{apod}} // Pass the full APOD object
-                className="border border-white/25 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                className="border border-white/25 rounded-lg overflow-hidden shadow-lg hover:border-white"
               >
                 <img
                   src={apod.media_type === 'video' ? apod.thumbnail_url : apod.url}
