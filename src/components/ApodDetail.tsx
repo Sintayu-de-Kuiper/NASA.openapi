@@ -38,6 +38,14 @@ const ApodDetail: React.FC = () => {
     return <div className="text-white text-center p-4">Loading...</div>;
   }
 
+  // Helper to get YouTube video ID from URL
+  function getYouTubeId(url?: string): string | null {
+    const match = url?.match(
+      /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+    );
+    return match ? match[1] : null;
+  }
+
   return (
     <div className="w-full min-h-screen h-full bg-black pt-20">
       <div className="px-6 max-w-7xl mx-auto py-8">
@@ -82,6 +90,17 @@ const ApodDetail: React.FC = () => {
             src={displayApod.hdurl || displayApod.url}
             alt={displayApod.title}
             className="w-full object-contain mb-4"
+          />
+        ) : getYouTubeId(displayApod.url) ? (
+          <iframe
+            width="100%"
+            height="400"
+            src={`https://www.youtube.com/embed/${getYouTubeId(displayApod.url)}`}
+            title={displayApod.title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="mb-4"
           />
         ) : (
           <video controls poster={displayApod.thumbnail_url} className="w-full mb-4">

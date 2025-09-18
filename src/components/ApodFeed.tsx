@@ -1,6 +1,5 @@
-// Updated ApodFeed.tsx (Apod.ts remains unchanged)
-import React, { useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import React, {useEffect, useContext} from 'react';
+import {Link} from 'react-router-dom';
 import InfiniteScroll from "react-infinite-scroll-component";
 import ApodFeedContext from "../context/ApodFeedContext.tsx";
 
@@ -14,20 +13,20 @@ if (!API_URL) {
   throw new Error('API_URL is not defined');
 }
 
+const ITEMS_PER_BATCH = 9;
+
 const ApodFeed: React.FC = () => {
   const context = useContext(ApodFeedContext);
   if (!context) {
     throw new Error('ApodFeed must be used within an ApodFeedProvider');
   }
-  const { apods, setApods, lastDate, setLastDate, hasMore, setHasMore } = context;
-
-  const ITEMS_PER_BATCH = 9;
+  const {apods, setApods, lastDate, setLastDate, hasMore, setHasMore} = context;
 
   const getDateString = (date: Date): string => date.toISOString().slice(0, 10);
 
   const fetchBatch = async (start: string, end: string) => {
     try {
-      const response = await fetch(`${API_URL}&start_date=${start}&end_date=${end}`);
+      const response = await fetch(`${API_URL}&start_date=${start}&end_date=${end}&thumbs=true`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -40,11 +39,10 @@ const ApodFeed: React.FC = () => {
   };
 
   const fetchInitial = async () => {
-    const today = new Date();
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - (ITEMS_PER_BATCH)); // 9 days for 9 items
+    const startDate = new Date();
+    startDate.setDate(new Date().getDate() - (ITEMS_PER_BATCH - 1)); // 9 days for 9 items
     const startStr = getDateString(startDate);
-    const endStr = getDateString(today);
+    const endStr = getDateString(new Date());
 
     // Set newLast to the day before startDate
     const newLast = new Date(startDate);
@@ -83,7 +81,8 @@ const ApodFeed: React.FC = () => {
     }
   }, []);
 
-  const monthNames = ["January", "February", "March", "April", "May", "June",
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
 
@@ -113,11 +112,15 @@ const ApodFeed: React.FC = () => {
                 />
                 <div className="p-4">
                   <h3 className="text-white font-semibold text-lg">{apod.title}</h3>
-                  <p
-                    className="text-gray-400 text-sm">{monthNames[new Date(apod.date).getMonth()]} {new Date(apod.date).getDate()}
-                    {new Date(apod.date).getFullYear() !== new Date().getFullYear() && (
-                      <> {new Date(apod.date).getFullYear()}</>
-                    )}</p>
+                  <div className="flex justify-between items-center">
+                    <p
+                      className="text-gray-400 text-sm">{monthNames[new Date(apod.date).getMonth()]} {new Date(apod.date).getDate()}
+                      {new Date(apod.date).getFullYear() !== new Date().getFullYear() && (
+                        <> {new Date(apod.date).getFullYear()}</>
+                      )}</p>
+                    {apod.media_type === 'video' && (<span className="material-symbols-outlined text-white/50">play_arrow</span>)}
+                    {apod.media_type === 'other' && (<span title="Media type not supported" className="material-symbols-outlined text-white/50">error</span>)}
+                  </div>
                 </div>
               </Link>
             ))}
