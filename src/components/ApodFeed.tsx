@@ -42,7 +42,7 @@ const ApodFeed: React.FC = () => {
   const fetchInitial = async () => {
     const today = new Date();
     const startDate = new Date(today);
-    startDate.setDate(today.getDate() - (ITEMS_PER_BATCH)); // 9 days for 9 items
+    startDate.setDate(today.getDate() - (ITEMS_PER_BATCH - 1)); // 9 days for 9 items
     const startStr = getDateString(startDate);
     const endStr = getDateString(today);
 
